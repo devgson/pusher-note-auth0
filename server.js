@@ -35,10 +35,10 @@ function loggedIn(req, res, next){
 
 app.get('/login', 
   passport.authenticate('auth0', {
-    clientID: 'hEaTPoVz7pP-kfcbIwcCM5hLWcSRn4hS',
-    domain: 'gson007.auth0.com',
+    clientID: 'AUTHO CLIENT ID',
+    domain: 'AUTHO DOMAIN NAME',
     redirectUri: 'http://localhost:3000/callback',
-    audience: 'https://gson007.auth0.com/userinfo',
+    audience: 'AUTHO AUDIENCE',
     responseType: 'code',
     scope: 'openid profile'
   })
