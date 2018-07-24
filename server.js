@@ -3,6 +3,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const session = require('express-session');
+const Auth0Strategy = require('passport-auth0');
 
 const app = express();
 
@@ -28,7 +29,14 @@ passport.deserializeUser(function (user, done) {
   done(null, user);
 });
 
-require('./auth.js');
+passport.use(new Auth0Strategy({
+  domain: 'gson007.auth0.com',
+  clientID: 'hEaTPoVz7pP-kfcbIwcCM5hLWcSRn4hS',
+  clientSecret: 'NqC8IL_NMjk2CqJWztV8trVi3kv_QJ2U4FueFTT-rojztIJPqhNw1RiXwc89yxI1',
+  callbackURL: 'http://localhost:3000/callback'
+}, (accessToken, refreshToken, extraParams, profile, done) => {
+  return done(null, profile);
+}));
 
 function loggedIn(req, res, next) {
   req.session.user ? next() : res.redirect('/login');
@@ -36,10 +44,10 @@ function loggedIn(req, res, next) {
 
 app.get('/login',
   passport.authenticate('auth0', {
-    clientID: 'AUTHO CLIENT ID',
-    domain: 'AUTHO DOMAIN NAME',
+    clientID: 'hEaTPoVz7pP-kfcbIwcCM5hLWcSRn4hS',
+    domain: 'gson007.auth0.com',
     redirectUri: 'http://localhost:3000/callback',
-    audience: 'AUTHO AUDIENCE',
+    audience: 'https://gson007.auth0.com/userinfo',
     responseType: 'code',
     scope: 'openid profile'
   })
@@ -63,4 +71,6 @@ app.post('/note', loggedIn, (req, res) => {
   res.redirect(`/note/${slug}`);
 });
 
-app.listen(3000);
+app.listen(3000, () => {
+  console.log('Server listening on port 3000.');
+});
