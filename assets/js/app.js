@@ -1,29 +1,29 @@
-var textSyncInstance = new TextSync({
-  instanceLocator: "v1:us1:27293868-2246-4359-baa9-0ff2a8fe02ce",
-})
+const textSyncInstance = new TextSync({
+  instanceLocator: 'v1:us1:27293868-2246-4359-baa9-0ff2a8fe02ce',
+});
 
-var docID = document.URL.slice(document.URL.lastIndexOf('/') + 1);
+const docID = document.URL.slice(document.URL.lastIndexOf('/') + 1);
 
-var editor = textSyncInstance.createEditor({
-  docId : docID,
-  element: "#text_editor",
+const editor = textSyncInstance.createEditor({
+  docId: docID,
+  element: '#text_editor',
   cursorLabelsAlwaysOn: true,
-  authEndpoint : "https://push-note-collab.herokuapp.com/textsync/tokens",
-  userName : user,
+  authEndpoint: 'https://push-note-collab.herokuapp.com/textsync/tokens',
+  userName: user,
 
-  onCollaboratorsJoined : function(users) {
+  onCollaboratorsJoined: (users) => {
     const activeUsers = document.querySelector('.active_users ul');
-    users.forEach(function(value){
-      activeUsers.insertAdjacentHTML('beforeend', `<li id="${value.siteId}">${value.name}</li>`);
+    users.forEach((value) => {
+      activeUsers.insertAdjacentHTML('beforeend', `<li id='${value.siteId}'>${value.name}</li>`);
     })
   },
 
-  onCollaboratorsLeft : function(users) {
+  onCollaboratorsLeft: (users) => {
     const activeUsers = document.querySelectorAll('.active_users ul li');
-    users.forEach(function(value) {
-      activeUsers.forEach(function(element){
-        if( element.id == value.siteId ) element.remove();
+    users.forEach((value) => {
+      activeUsers.forEach((element) => {
+        if (element.id === value.siteId) element.remove();
       })
     })
   }
-})
+});
