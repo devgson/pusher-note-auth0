@@ -2,9 +2,8 @@
   "name": "real-time-editor",
   "version": "1.0.0",
   "description": "Work on an article or a piece of text with your colleagues from anywhere in the world",
-  "main": "server/server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js"
   },
   "author": "Devgson",
   "license": "MIT",
