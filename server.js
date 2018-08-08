@@ -6,7 +6,7 @@ const session = require('express-session');
 const Auth0Strategy = require('passport-auth0');
 const TextSync = require('textsync-server-node');
 require('dotenv').config({ path : 'variables.env' });
-console.log(process.env.INSTANCE_LOCATOR)
+
 const textSync = new TextSync({
   instanceLocator: process.env.INSTANCE_LOCATOR,
   key: process.env.KEY
@@ -56,6 +56,9 @@ function loggedIn(req, res, next) {
 }
 
 app.post('/textsync/tokens', (req, res) => {
+  
+  //Certain Users can be restricted to either READ or WRITE access on the document
+  //to keep this demo simple, all users are granted READ and WRITE access to the document
   const permissionsFn = docId => {
     return Promise.resolve([
       TextSync.Permissions.READ,
@@ -63,6 +66,7 @@ app.post('/textsync/tokens', (req, res) => {
     ])
   }
 
+  //Set autherntication token to expire in about 20 minutes
   let options = { tokenExpiry: 1 * 60 * 20 };
   let token = textSync
     .authorizeDocument(req.body, permissionsFn, options)
