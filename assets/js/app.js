@@ -8,7 +8,7 @@ const editor = textSyncInstance.createEditor({
   docId: docID,
   element: '#text_editor',
   cursorLabelsAlwaysOn: true,
-  authEndpoint: 'https://push-note-collab.herokuapp.com/textsync/tokens',
+  authEndpoint: 'https://pusher-authenticate.herokuapp.com/textsync/tokens',
   userName: user,
 
   onCollaboratorsJoined: (users) => {

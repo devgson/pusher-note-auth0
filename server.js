@@ -4,8 +4,13 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const Auth0Strategy = require('passport-auth0');
+const TextSync = require('textsync-server-node');
 require('dotenv').config({ path : 'variables.env' });
 
+const textSync = new TextSync({
+  instanceLocator: process.env.INSTANCE_LOCATOR,
+  key: process.env.KEY
+})
 const app = express();
 
 app.set('view engine', 'pug');
@@ -18,6 +23,7 @@ app.use(session({
 
 app.use(express.static(path.join(__dirname, 'assets')));
 app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -42,6 +48,22 @@ passport.use(new Auth0Strategy({
 function loggedIn(req, res, next) {
   req.session.user ? next() : res.redirect('/login');
 }
+
+app.post('/textsync/tokens', (req, res) => {
+  const permissionsFn = docId => {
+    return Promise.resolve([
+      TextSync.Permissions.READ,
+      TextSync.Permissions.WRITE
+    ])
+  }
+
+  let options = { tokenExpiry: 1 * 60 * 20 };
+  let token = textSync
+    .authorizeDocument(req.body, permissionsFn, options)
+    .then(token => {
+      res.json(token);
+    });
+})
 
 app.get('/login',
   passport.authenticate('auth0', {
