@@ -6,7 +6,7 @@ const session = require('express-session');
 const Auth0Strategy = require('passport-auth0');
 const TextSync = require('textsync-server-node');
 require('dotenv').config({ path : 'variables.env' });
-
+console.log(process.env.INSTANCE_LOCATOR)
 const textSync = new TextSync({
   instanceLocator: process.env.INSTANCE_LOCATOR,
   key: process.env.KEY
@@ -20,6 +20,12 @@ app.use(session({
   resave: true,
   saveUninitialized: true
 }));
+
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  next();
+});
 
 app.use(express.static(path.join(__dirname, 'assets')));
 app.use(bodyParser.urlencoded({extended: false}));
