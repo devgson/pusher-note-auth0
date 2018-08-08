@@ -67,8 +67,8 @@ app.post('/textsync/tokens', (req, res) => {
   }
 
   //Set autherntication token to expire in about 20 minutes
-  let options = { tokenExpiry: 1 * 60 * 20 };
-  let token = textSync
+  const options = { tokenExpiry: 1 * 60 * 20 };
+  const token = textSync
     .authorizeDocument(req.body, permissionsFn, options)
     .then(token => {
       res.json(token);
