@@ -2,10 +2,8 @@ const textSyncInstance = new TextSync({
   instanceLocator: "v1:us1:27293868-2246-4359-baa9-0ff2a8fe02ce"
 });
 
-const docID = document.URL.slice(document.URL.lastIndexOf("/") + 1);
-
 const editor = textSyncInstance.createEditor({
-  docId: docID,
+  docId: document.URL.slice(document.URL.lastIndexOf("/") + 1),
   element: "#text_editor",
   cursorLabelsAlwaysOn: true,
   authEndpoint: "http://localhost:3000/textsync/tokens",
